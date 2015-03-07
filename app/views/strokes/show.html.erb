@@ -1,0 +1,24 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Theta:</strong>
+  <%= @stroke.theta %>
+</p>
+
+<p>
+  <strong>Type:</strong>
+  <%= @stroke.type_id %>
+</p>
+
+<p>
+  <strong>Shape:</strong>
+  <%= @stroke.shape_id %>
+</p>
+
+<p>
+  <strong>Pos:</strong>
+  <%= @stroke.pos %>
+</p>
+
+<%= link_to 'Edit', edit_stroke_path(@stroke) %> |
+<%= link_to 'Back', strokes_path %>

@@ -1,0 +1,33 @@
+<%= form_for(@stroke) do |f| %>
+  <% if @stroke.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@stroke.errors.count, "error") %> prohibited this stroke from being saved:</h2>
+
+      <ul>
+      <% @stroke.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :theta_id %><br>
+    <%= f.text_field :theta_id %>
+  </div>
+  <div class="field">
+    <%= f.label :type_id %><br>
+    <%= f.number_field :type_id %>
+  </div>
+  <div class="field">
+    <%= f.label :shape_id %><br>
+    <%= f.number_field :shape_id %>
+  </div>
+  <div class="field">
+    <%= f.label :pos %><br>
+    <%= f.text_area :pos %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

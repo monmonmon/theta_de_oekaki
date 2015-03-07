@@ -1,0 +1,31 @@
+<h1>Listing strokes</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Theta</th>
+      <th>Type</th>
+      <th>Shape</th>
+      <th>Pos</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @strokes.each do |stroke| %>
+      <tr>
+        <td><%= stroke.theta %></td>
+        <td><%= stroke.type_id %></td>
+        <td><%= stroke.shape_id %></td>
+        <td><%= stroke.pos %></td>
+        <td><%= link_to 'Show', stroke %></td>
+        <td><%= link_to 'Edit', edit_stroke_path(stroke) %></td>
+        <td><%= link_to 'Destroy', stroke, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Stroke', new_stroke_path %>

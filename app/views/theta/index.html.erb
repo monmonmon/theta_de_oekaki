@@ -1,0 +1,27 @@
+<h1>Listing theta</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Url hash</th>
+      <th>Image url</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @theta.each do |thetum| %>
+      <tr>
+        <td><%= thetum.url_hash %></td>
+        <td><%= thetum.image_url %></td>
+        <td><%= link_to 'Show', thetum %></td>
+        <td><%= link_to 'Edit', edit_thetum_path(thetum) %></td>
+        <td><%= link_to 'Destroy', thetum, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Thetum', new_thetum_path %>

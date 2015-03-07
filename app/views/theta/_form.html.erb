@@ -1,0 +1,25 @@
+<%= form_for(@thetum) do |f| %>
+  <% if @thetum.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@thetum.errors.count, "error") %> prohibited this thetum from being saved:</h2>
+
+      <ul>
+      <% @thetum.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :url_hash %><br>
+    <%= f.text_field :url_hash %>
+  </div>
+  <div class="field">
+    <%= f.label :image_url %><br>
+    <%= f.text_field :image_url %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>
