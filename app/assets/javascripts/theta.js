@@ -61,7 +61,7 @@ var theta = {
 		for (var i = 0; i < stroke.pos.length; i++) {
 			var p = stroke.pos[i];
 			var object = new THREE.Mesh(
-				new THREE.SphereGeometry(1),
+				new THREE.SphereGeometry(p.size),
 				new THREE.MeshBasicMaterial({
 					color: p.color
 				})
@@ -159,7 +159,7 @@ var theta = {
 		}
 	},
 	jsonize: function (objects) {
-		var pos = [], color;
+		var pos = [], color, size, position;
 		for (var i = 0; i < objects.length; i++) {
 			try {
 				color = objects[i].material.color;
@@ -167,11 +167,14 @@ var theta = {
 			} catch (e) {
 				color = null;
 			}
+			size = objects[i].geometry.boundingSphere.radius;
+			position = objects[i].position;
 			pos.push({
 				color: color,
-				x: objects[i].position.x,
-				y: objects[i].position.y,
-				z: objects[i].position.z
+				size: size,
+				x: position.x,
+				y: position.y,
+				z: position.z
 			});
 		}
 		return {
@@ -189,14 +192,18 @@ var theta = {
 	},
 	buttons: {
 		show: function () {
-			$('.mode-button').removeClass('hidden');
+			$('#edit-controls').removeClass('hidden');
 		},
 		hide: function () {
-			$('.mode-button').addClass('hidden');
+			$('#edit-controls').addClass('hidden');
 		},
 	},
 };
 
 $(function () {
 	theta.init($('#sphere').data('id'));
+
+	$('input:radio[name=stroke-size]').on('change', function () {
+		theta.strokeSize = $(this).val() - 0;
+	}).trigger('change');
 });

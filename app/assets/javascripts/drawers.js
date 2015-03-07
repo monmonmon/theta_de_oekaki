@@ -17,7 +17,7 @@ RedParticleDrawer.prototype = new Drawer;
 RedParticleDrawer.prototype.draw = function (point) {
 	// console.log(point);
 	var object = new THREE.Mesh(
-		new THREE.SphereGeometry(1),
+		new THREE.SphereGeometry(theta.strokeSize),
 		new THREE.MeshBasicMaterial({
 			color: 0xff0000
 		})
@@ -32,7 +32,7 @@ var GreenParticleDrawer = function () {
 GreenParticleDrawer.prototype = new Drawer;
 GreenParticleDrawer.prototype.draw = function (point) {
 	var object = new THREE.Mesh(
-		new THREE.SphereGeometry(1),
+		new THREE.SphereGeometry(theta.strokeSize),
 		new THREE.MeshBasicMaterial({
 			color: 0x00ff00
 		})
@@ -47,7 +47,7 @@ var RainbowParticleDrawer = function () {
 RainbowParticleDrawer.prototype = new Drawer;
 RainbowParticleDrawer.prototype.draw = function (point) {
 	var object = new THREE.Mesh(
-		new THREE.SphereGeometry(1)
+		new THREE.SphereGeometry(theta.strokeSize)
 	);
 	this.plot(point, object);
 };
@@ -61,7 +61,7 @@ DelayedDrawer.prototype = new Drawer;
 DelayedDrawer.prototype.draw = function (point) {
 	if (this.waiting) {
 		var object = new THREE.Mesh(
-			new THREE.SphereGeometry(1),
+			new THREE.SphereGeometry(theta.strokeSize),
 			new THREE.MeshBasicMaterial({
 				color: 0x00ffff
 			})
@@ -72,7 +72,7 @@ DelayedDrawer.prototype.draw = function (point) {
 		var that = this;
 		setTimeout(function () {
 			that.waiting = true;
-		}, 100);
+		}, 50);
 	}
 };
 

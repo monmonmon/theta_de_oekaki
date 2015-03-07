@@ -6,12 +6,25 @@
   display: none !important;
 }
 
+.inline {
+  display: inline !important;
+}
+
 #sphere {
   position: relative;
 }
 
 #toggle-edit-button {
   margin-right: 20px;
+}
+
+#edit-controls {
+  display: inline;
+}
+
+#stroke-size-select {
+  display: inline;
+  font-size: 12pt;
 }
 
 .control-buttons {
