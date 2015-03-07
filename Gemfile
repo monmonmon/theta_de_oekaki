@@ -39,3 +39,33 @@ gem 'spring',        group: :development
 # gem 'debugger', group: [:development, :test]
 
 gem 'rspec'
+
+group :development do
+  # pry
+  gem 'pry-rails'
+  gem 'pry-doc'
+  gem 'pry-debugger'
+  gem 'pry-stack_explorer'
+  # make outputs in rake console awesome
+  gem 'awesome_print'
+  # hide asset logs
+  gem 'quiet_assets'
+  # rails application preloader
+  gem 'spring'
+  gem 'spring-commands-rspec'
+  # make error messages & error pages better
+  gem 'better_errors'
+  gem 'binding_of_caller'
+  # supply info for "RailsPanel" chrome extension
+  gem 'meta_request'
+  # localhost:3000/rails/routes to show rails routes
+  gem 'sextant'
+  # help to kill N+1 queries and unused eager loading
+  gem 'bullet'
+  # run `brakeman -o brakeman.html` to generate static security analysis report
+  gem 'brakeman'
+  # rubocop
+  gem 'rubocop'
+  # reek
+  gem 'reek'
+end
