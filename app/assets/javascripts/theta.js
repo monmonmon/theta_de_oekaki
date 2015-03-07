@@ -15,8 +15,10 @@ var theta = {
 		theta.channel = channel;
 		var $area = $('#sphere');
 		var imageUrl = $area.data('image');
-		theta.width = $area.data('width');
-		theta.height = $area.data('height');
+		theta.width = $(window).width(); //$area.data('width');
+		theta.height = $(window).height(); //$area.data('height');
+        
+
 		theta.scene = new THREE.Scene();
 		theta.camera = new THREE.PerspectiveCamera(75, theta.width / theta.height, 1, 1000);
         theta.client = new Yanoo.Client(location.hostname + ':3001/websocket', this.channel);
