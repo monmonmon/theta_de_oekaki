@@ -59,8 +59,8 @@ var theta = {
 		// document.addEventListener('DOMMouseScroll', onMouseWheel, false);
 
 		$('#toggle-edit-button').on('click', theta.toggleEdit);
-		$('.mode-button').on('click', theta.clickChangeDrawer);
-		theta.changeDrawer(RedParticleDrawer)
+		$('.mode-button').on('click', theta.changeDrawer)
+		$('.mode-button:first').trigger('click');
 	},
 	toggleEdit: function () {
 		theta.editing = theta.editing ? false : true;
@@ -78,13 +78,10 @@ var theta = {
 			theta.disableDrawing();
 		}
 	},
-	clickChangeDrawer: function () {
+	changeDrawer: function () {
 		var drawerName = $(this).data('drawer');
-		drawerName = eval(drawerName);
-		theta.changeDrawer(drawerName);
-	},
-	changeDrawer: function (drawerName) {
-		theta.drawer = new drawerName(theta)
+		var drawerClass = eval(drawerName);
+		theta.drawer = new drawerClass(theta)
 		// change the style of the clicked button
 		$('.mode-button').removeClass('selected-mode');
 		$(this).addClass('selected-mode');
