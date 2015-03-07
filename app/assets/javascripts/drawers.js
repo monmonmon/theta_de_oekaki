@@ -4,7 +4,7 @@ var Drawer = function (theta) {
 };
 Drawer.prototype.plot = function (point, object) {
 	object.position.set(point.x, point.y, point.z);
-	object.lookAt(theta.camera.position);
+	object.lookAt(theta.sphere.position);
 	this.theta.scene.add(object);
 	this.theta.plotted_objects.push(object);
 };
