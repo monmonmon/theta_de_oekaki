@@ -16,7 +16,7 @@ var theta = {
 		theta.height = $area.data('height');
 		theta.scene = new THREE.Scene();
 		theta.camera = new THREE.PerspectiveCamera(75, theta.width / theta.height, 1, 1000);
-		theta.camera.position.x = 0.1;
+		// theta.camera.position.x = 0.1;
 		theta.camera.position.x = 150;	// get outside of the sphere
 		theta.renderer = Detector.webgl ? new THREE.WebGLRenderer() : new THREE.CanvasRenderer();
 		theta.renderer.setSize(theta.width, theta.height);
@@ -26,7 +26,7 @@ var theta = {
 				map: THREE.ImageUtils.loadTexture(imageUrl)
 			})
 		);
-		// theta.sphere.scale.x = -1;
+		theta.sphere.scale.x = -1;
 		theta.scene.add(theta.sphere);
 
 		theta.controls = new THREE.OrbitControls(theta.camera);
