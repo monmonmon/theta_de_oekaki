@@ -5,5 +5,6 @@ Rails.application.routes.draw do
 
   resources :theta
 
+  resources :hmock_websocketview
   get '/test' => 'theta#test'
 end
