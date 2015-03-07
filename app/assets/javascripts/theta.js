@@ -18,10 +18,7 @@ var theta = {
 		theta.height = $area.data('height');
 		theta.scene = new THREE.Scene();
 		theta.camera = new THREE.PerspectiveCamera(75, theta.width / theta.height, 1, 1000);
-
 		theta.camera.position.x = 0.1;  // カメラは球体の内側
-		// theta.camera.position.x = 150;	// カメラは球体の外側
-
 		theta.renderer = Detector.webgl ? new THREE.WebGLRenderer() : new THREE.CanvasRenderer();
 		theta.renderer.setSize(theta.width, theta.height);
 		theta.sphere = new THREE.Mesh(
@@ -32,11 +29,7 @@ var theta = {
 		);
 		theta.sphere.scale.x = -1;
 		theta.scene.add(theta.sphere);
-
 		theta.controls = new THREE.OrbitControls(theta.camera);
-
-		theta.toggleEdit();
-
 		$area.append(theta.renderer.domElement);
 		render();
 		function render() {
@@ -44,26 +37,36 @@ var theta = {
 			requestAnimationFrame(render);
 			theta.renderer.render(theta.scene, theta.camera);
 		}
-		// function onMouseWheel(event) {
-		// 	event.preventDefault();
-		// 	if (event.wheelDeltaY) { // WebKit
-		// 		theta.camera.fov -= event.wheelDeltaY * 0.05;
-		// 	} else if (event.wheelDelta) { // Opera / IE9
-		// 		theta.camera.fov -= event.wheelDelta * 0.05;
-		// 	} else if (event.detail) { // Firefox
-		// 		theta.camera.fov += event.detail * 1.0;
-		// 	}
-		// 	theta.camera.fov = Math.max(40, Math.min(100, theta.camera.fov));
-		// 	theta.camera.updateProjectionMatrix();
-		// }
-		// document.addEventListener('mousewheel', onMouseWheel, false);
-		// document.addEventListener('DOMMouseScroll', onMouseWheel, false);
 
-		$('#toggle-edit-button').on('click', theta.toggleEdit);
-		$('.mode-button').on('click', theta.changeDrawer)
+		// set event handlers
+		// document.addEventListener('mousewheel', theta.onMouseWheel, false);
+		// document.addEventListener('DOMMouseScroll', theta.onMouseWheel, false);
+		$('#toggle-edit-button').on('click', theta.onToggleEdit);
+		$('.mode-button').on('click', theta.onChangeMode)
+		// select a default drawer
 		$('.mode-button:first').trigger('click');
 	},
-	toggleEdit: function () {
+	onMouseWheel: function (event) {
+		event.preventDefault();
+		if (event.wheelDeltaY) { // WebKit
+			theta.camera.fov -= event.wheelDeltaY * 0.05;
+		} else if (event.wheelDelta) { // Opera / IE9
+			theta.camera.fov -= event.wheelDelta * 0.05;
+		} else if (event.detail) { // Firefox
+			theta.camera.fov += event.detail * 1.0;
+		}
+		theta.camera.fov = Math.max(40, Math.min(100, theta.camera.fov));
+		theta.camera.updateProjectionMatrix();
+	},
+	onChangeMode: function () {
+		var drawerName = $(this).data('drawer');
+		var drawerClass = eval(drawerName);
+		theta.drawer = new drawerClass(theta)
+		// change the style of the clicked button
+		$('.mode-button').removeClass('selected-mode');
+		$(this).addClass('selected-mode');
+	},
+	onToggleEdit: function () {
 		theta.editing = theta.editing ? false : true;
 		// prevent rotation / zoom / pan by the user
 		theta.controls.noZoom
@@ -78,14 +81,6 @@ var theta = {
 			theta.buttons.hide();
 			theta.disableDrawing();
 		}
-	},
-	changeDrawer: function () {
-		var drawerName = $(this).data('drawer');
-		var drawerClass = eval(drawerName);
-		theta.drawer = new drawerClass(theta)
-		// change the style of the clicked button
-		$('.mode-button').removeClass('selected-mode');
-		$(this).addClass('selected-mode');
 	},
 	enableDrawing: function () {
 		$(theta.renderer.domElement)
