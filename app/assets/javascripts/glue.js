@@ -12,7 +12,6 @@ window.jQuery(function($) {
         $('#debug-write').html('シェイプをすべて読み込みました<br />');
         $('#send').on('click', function() {
             window.client.append({
-                "sender":  window.client.sender_id,
                 "theta_id": channel,
                 "type_id": 1,
                 "image_id": 1,

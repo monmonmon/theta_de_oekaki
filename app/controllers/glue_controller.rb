@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-class HmockWebsocketController < WebsocketRails::BaseController
+class GlueController < WebsocketRails::BaseController
 
   def initialize_session
     logger.debug("initialize chat controller")
@@ -8,15 +8,15 @@ class HmockWebsocketController < WebsocketRails::BaseController
 
   def append
     req = JSON.parse(message)
+    theta_id = req["theta_id"].to_i
     response = {
       result: "OK",
       data: req,
       meta: {
-        requested: 1377003045,
-        exec_time: 0.089531
+        requested: Time.now.to_i
       }
     }
-    theta_id = req["theta_id"].to_i
     WebsocketRails[theta_id].trigger :shape, response
   end
+
 end
