@@ -3,7 +3,7 @@
 class GlueController < WebsocketRails::BaseController
 
   def initialize_session
-    logger.debug("initialize chat controller")
+    logger.debug("initialize glue controller")
   end
 
   def append

@@ -5,3 +5,7 @@
 #
 #   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
 #   Mayor.create(name: 'Emanuel', city: cities.first)
+
+Theta.new(url_hash: "theta1", image_url: "http://theta_de_oekaki.dev.hinovana.com:8888/assets/1st_meeting.jpg").save!
+Theta.new(url_hash: "theta2", image_url: "http://theta_de_oekaki.dev.hinovana.com:8888/assets/1st_meeting.jpg").save!
+Theta.new(url_hash: "theta3", image_url: "http://theta_de_oekaki.dev.hinovana.com:8888/assets/1st_meeting.jpg").save!
