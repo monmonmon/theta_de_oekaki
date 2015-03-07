@@ -101,9 +101,11 @@ var theta = {
 		console.log("editing: " + theta.editing);
 		// show controll buttons
 		if (theta.editing) {
+			$('#toggle-edit-button').text('Move');
 			theta.buttons.show();
 			theta.enableDrawing();
 		} else {
+			$('#toggle-edit-button').text('Edit');
 			theta.buttons.hide();
 			theta.disableDrawing();
 		}
