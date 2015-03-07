@@ -1,5 +1,6 @@
 class ThetaController < ApplicationController
-  before_action :set_thetum, only: [:show, :edit, :update, :destroy]
+  before_action :set_theta, only: [:show, :edit, :update, :destroy]
+  protect_from_forgery except: :create
 
   def test
   end
@@ -7,7 +8,7 @@ class ThetaController < ApplicationController
   # GET /theta
   # GET /theta.json
   def index
-    @theta = Thetum.all
+    @theta = Theta.all
   end
 
   # GET /theta/1
@@ -17,7 +18,7 @@ class ThetaController < ApplicationController
 
   # GET /theta/new
   def new
-    @thetum = Thetum.new
+    @theta = Theta.new
   end
 
   # GET /theta/1/edit
@@ -27,29 +28,28 @@ class ThetaController < ApplicationController
   # POST /theta
   # POST /theta.json
   def create
-    @thetum = Thetum.new(thetum_params)
+    request_image = params[:image]
+    url_hash = SecureRandom.urlsafe_base64(6)
+    name = url_hash + "-" + request_image.original_filename.downcase
 
-    respond_to do |format|
-      if @thetum.save
-        format.html { redirect_to @thetum, notice: 'Thetum was successfully created.' }
-        format.json { render :show, status: :created, location: @thetum }
-      else
-        format.html { render :new }
-        format.json { render json: @thetum.errors, status: :unprocessable_entity }
-      end
+    File.open("public/theta/#{name}", 'wb') do |f|
+      f.write(request_image.read)
     end
+
+    theta = Theta.create!(url_hash: url_hash, image_url: name)
+    render json: "http://www.rakugaki.tk/#{theta.url_hash}", status: 201
   end
 
   # PATCH/PUT /theta/1
   # PATCH/PUT /theta/1.json
   def update
     respond_to do |format|
-      if @thetum.update(thetum_params)
-        format.html { redirect_to @thetum, notice: 'Thetum was successfully updated.' }
-        format.json { render :show, status: :ok, location: @thetum }
+      if @theta.update(theta_params)
+        format.html { redirect_to @theta, notice: 'Theta was successfully updated.' }
+        format.json { render :show, status: :ok, location: @theta }
       else
         format.html { render :edit }
-        format.json { render json: @thetum.errors, status: :unprocessable_entity }
+        format.json { render json: @theta.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -57,21 +57,22 @@ class ThetaController < ApplicationController
   # DELETE /theta/1
   # DELETE /theta/1.json
   def destroy
-    @thetum.destroy
+    @theta.destroy
     respond_to do |format|
-      format.html { redirect_to theta_url, notice: 'Thetum was successfully destroyed.' }
+      format.html { redirect_to theta_url, notice: 'Theta was successfully destroyed.' }
       format.json { head :no_content }
     end
   end
 
   private
     # Use callbacks to share common setup or constraints between actions.
-    def set_thetum
-      @thetum = Thetum.find(params[:id])
+    def set_theta
+      @theta = Theta.find(params[:id])
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.
-    def thetum_params
-      params.require(:thetum).permit(:url_hash, :image_url)
+    def theta_params
+#      params.require(:image).permit(:url_hash, :image_url)
+      params.permit(:image, :url_hash, :image_url)
     end
 end
