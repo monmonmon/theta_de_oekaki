@@ -3,6 +3,7 @@
 /db/*.sqlite3-journal
 /log/*.log
 /tmp
+/piblic/theta/*.jpg
 *.swp
 .#*
 *~
