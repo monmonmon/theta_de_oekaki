@@ -1,11 +1,13 @@
-/.bundle
+B1;2c/.bundle
 /db/*.sqlite3
 /db/*.sqlite3-journal
 /log/*.log
 /tmp
+/public/theta/*.jpg
 *.swp
 .#*
 *~
 .DS_Store
 pushtest
-Gemfile.lock
+.envrc
+.ruby-version
