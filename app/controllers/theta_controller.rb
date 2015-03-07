@@ -32,7 +32,7 @@ class ThetaController < ApplicationController
     url_hash = SecureRandom.urlsafe_base64(6)
     name = url_hash + "-" + request_image.original_filename.downcase
 
-    File.open("public/theta/#{name}", 'wb') do |f|
+    File.open("#{Rails.root}/public/theta/#{name}", 'wb') do |f|
       f.write(request_image.read)
     end
 
