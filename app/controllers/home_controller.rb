@@ -18,6 +18,7 @@ class HomeController < ApplicationController
       }
       format.html {
         @theta = Theta.find_by_url_hash(params[:hash])
+        @theta.image_url = "/theta/" + @theta.image_url
       }
     end
   end
