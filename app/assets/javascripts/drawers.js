@@ -42,13 +42,26 @@ GreenParticleDrawer.prototype.draw = function (point) {
 
 // 虹色パーティクル
 var RainbowParticleDrawer = function () {
+	this.colors = [
+		0xff0000,
+		0xff00ff,
+		0xffff00,
+		0x00ff00,
+		0x0000ff,
+		0x00ffff,
+	];
+	this.colorIndex = 0;
 	Drawer.apply(this, arguments);
 };
 RainbowParticleDrawer.prototype = new Drawer;
 RainbowParticleDrawer.prototype.draw = function (point) {
 	var object = new THREE.Mesh(
-		new THREE.SphereGeometry(theta.strokeSize)
+		new THREE.SphereGeometry(theta.strokeSize),
+		new THREE.MeshBasicMaterial({
+			color: this.colors[this.colorIndex]
+		})
 	);
+	this.colorIndex = (this.colorIndex + 1) % this.colors.length;
 	this.plot(point, object);
 };
 

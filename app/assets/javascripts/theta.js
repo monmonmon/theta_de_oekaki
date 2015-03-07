@@ -17,8 +17,6 @@ var theta = {
 		var imageUrl = $area.data('image');
 		theta.width = $(window).width(); //$area.data('width');
 		theta.height = $(window).height(); //$area.data('height');
-        
-
 		theta.scene = new THREE.Scene();
 		theta.camera = new THREE.PerspectiveCamera(75, theta.width / theta.height, 1, 1000);
         theta.client = new Yanoo.Client(location.hostname + ':3001/websocket', this.channel);
@@ -207,5 +205,6 @@ $(function () {
 
 	$('input:radio[name=stroke-size]').on('change', function () {
 		theta.strokeSize = $(this).val() - 0;
-	}).trigger('change');
+	});
+	$('#stroke-size-2').trigger('click');
 });
