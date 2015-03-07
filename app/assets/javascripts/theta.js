@@ -16,8 +16,10 @@ var theta = {
 		theta.height = $area.data('height');
 		theta.scene = new THREE.Scene();
 		theta.camera = new THREE.PerspectiveCamera(75, theta.width / theta.height, 1, 1000);
-		// theta.camera.position.x = 0.1;
-		theta.camera.position.x = 150;	// get outside of the sphere
+
+		// theta.camera.position.x = 0.1;  // カメラは球体の内側
+		theta.camera.position.x = 150;	// カメラは球体の外側
+
 		theta.renderer = Detector.webgl ? new THREE.WebGLRenderer() : new THREE.CanvasRenderer();
 		theta.renderer.setSize(theta.width, theta.height);
 		theta.sphere = new THREE.Mesh(
@@ -81,6 +83,10 @@ var theta = {
 			.on('mousemove', theta.draw);
 	},
 	disableDrawing: function () {
+		$(theta.renderer.domElement)
+			.off('mousedown', theta.startDrawing)
+			.off('mouseup', theta.finishDrawing)
+			.off('mousemove', theta.draw);
 	},
 	startDrawing: function () {
 		theta.drawing = true;
@@ -106,11 +112,11 @@ var theta = {
 			// pos はスクリーン座標系なので、オブジェクトの座標系に変換
 			// オブジェクト座標系は今表示しているカメラからの視点なので、第二引数にカメラオブジェクトを渡す
 			pos.unproject(theta.camera);
+			// console.log(pos);
 			// 始点、向きベクトルを渡してレイを作成
 			var ray = new THREE.Raycaster(theta.camera.position, pos.sub(theta.camera.position).normalize());
-			// 交差判定
-			// 引数は取得対象となるMeshの配列を渡す。以下はシーン内のすべてのオブジェクトを対象に。
-			// var intersects = ray.intersectObjects(theta.scene.children);
+			console.log("ray: " + ray.ray);
+			// 交差判定。引数として取得対象となるMeshの配列を渡す
 			var intersects = ray.intersectObjects([theta.sphere]);
 			if (intersects.length > 0) {
 				// 1つ以上のオブジェクトと交差
@@ -123,10 +129,8 @@ var theta = {
 	plotable: true,
 	hoehoe: function (point) {
 		if (theta.plotable) {
-			console.log('plot!');
 			theta.plotParticle(point);
-			theta.plotable = false;
-				theta.plotable = true;
+			// theta.plotable = false;
 			// setTimeout(function () {
 			// 	theta.plotable = true;
 			// }, 1);
@@ -135,10 +139,10 @@ var theta = {
 	plotParticle: function (point) {
 		console.log(point);
 		var particle = new THREE.Mesh(
-			new THREE.SphereGeometry(1)// ,
-			// new THREE.MeshBasicMaterial({
-			// 	color: "0xff0000"
-			// })
+			new THREE.SphereGeometry(1),
+			new THREE.MeshBasicMaterial({
+				color: 0xff0000
+			})
 		);
 		particle.position.x = point.x;
 		particle.position.y = point.y;
