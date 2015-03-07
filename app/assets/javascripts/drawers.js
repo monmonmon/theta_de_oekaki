@@ -9,7 +9,7 @@ Drawer.prototype.plot = function (point, object) {
 	this.theta.plotted_objects.push(object);
 };
 
-// 赤いパーティクル
+// 赤
 var RedParticleDrawer = function () {
 	Drawer.apply(this, arguments);
 };
@@ -25,7 +25,7 @@ RedParticleDrawer.prototype.draw = function (point) {
 	this.plot(point, object);
 };
 
-// 緑のパーティクル
+// 緑
 var GreenParticleDrawer = function () {
 	Drawer.apply(this, arguments);
 };
@@ -40,7 +40,22 @@ GreenParticleDrawer.prototype.draw = function (point) {
 	this.plot(point, object);
 };
 
-// 虹色パーティクル
+// 水色
+var DelayedDrawer = function () {
+	Drawer.apply(this, arguments);
+};
+DelayedDrawer.prototype = new Drawer;
+DelayedDrawer.prototype.draw = function (point) {
+	var object = new THREE.Mesh(
+		new THREE.SphereGeometry(theta.strokeSize),
+		new THREE.MeshBasicMaterial({
+			color: 0x00ffff
+		})
+	);
+	this.plot(point, object);
+};
+
+// 虹色
 var RainbowParticleDrawer = function () {
 	this.colors = [
 		0xff0000,
@@ -63,30 +78,6 @@ RainbowParticleDrawer.prototype.draw = function (point) {
 	);
 	this.colorIndex = (this.colorIndex + 1) % this.colors.length;
 	this.plot(point, object);
-};
-
-// 遅延
-var DelayedDrawer = function () {
-	this.waiting = true;
-	Drawer.apply(this, arguments);
-};
-DelayedDrawer.prototype = new Drawer;
-DelayedDrawer.prototype.draw = function (point) {
-	if (this.waiting) {
-		var object = new THREE.Mesh(
-			new THREE.SphereGeometry(theta.strokeSize),
-			new THREE.MeshBasicMaterial({
-				color: 0x00ffff
-			})
-		);
-		this.plot(point, object);
-
-		this.waiting = false;
-		var that = this;
-		setTimeout(function () {
-			that.waiting = true;
-		}, 50);
-	}
 };
 
 // // 画像
