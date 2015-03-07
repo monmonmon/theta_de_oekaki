@@ -1,5 +1,5 @@
 var theta = {
-	channel: "xxx",
+	channel: 2,
 	scene: null,
 	sphere: null,
 	width: null,
@@ -14,10 +14,11 @@ var theta = {
 	init: function () {
 		var $area = $('#sphere');
 		var imageUrl = $area.data('image');
-		theta.width = $area.data('width')
+		theta.width = $area.data('width');
 		theta.height = $area.data('height');
 		theta.scene = new THREE.Scene();
 		theta.camera = new THREE.PerspectiveCamera(75, theta.width / theta.height, 1, 1000);
+        theta.client = new Yanoo.Client(location.hostname + ':3001/websocket', this.channel);
 		theta.camera.position.x = 0.1;  // カメラは球体の内側
 		theta.renderer = Detector.webgl ? new THREE.WebGLRenderer() : new THREE.CanvasRenderer();
 		theta.renderer.setSize(theta.width, theta.height);
@@ -61,7 +62,7 @@ var theta = {
 	onChangeMode: function () {
 		var drawerName = $(this).data('drawer');
 		var drawerClass = eval(drawerName);
-		theta.drawer = new drawerClass(theta)
+		theta.drawer = new drawerClass(theta);
 		// change the style of the clicked button
 		$('.mode-button').removeClass('selected-mode');
 		$(this).addClass('selected-mode');
@@ -157,7 +158,7 @@ var theta = {
 	upload: function () {
 		var json_object = theta.jsonize(theta.plotted_objects);
 		console.log(JSON.stringify(json_object));
-		// theta.client.append(json_object);
+		theta.client.append(json_object);
 	},
 	buttons: {
 		show: function () {
