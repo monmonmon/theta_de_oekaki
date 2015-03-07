@@ -41,8 +41,8 @@ var theta = {
 		}
 
 		// set event handlers
-		// document.addEventListener('mousewheel', theta.onMouseWheel, false);
-		// document.addEventListener('DOMMouseScroll', theta.onMouseWheel, false);
+		document.addEventListener('mousewheel', theta.onMouseWheel, false);
+		document.addEventListener('DOMMouseScroll', theta.onMouseWheel, false);
 		$('#toggle-edit-button').on('click', theta.onToggleEdit);
 		$('.mode-button').on('click', theta.onChangeMode)
 		// select a default drawer
@@ -196,5 +196,5 @@ var theta = {
 };
 
 $(function () {
-	theta.init(2);
+	theta.init($('#sphere').data('id'));
 });
