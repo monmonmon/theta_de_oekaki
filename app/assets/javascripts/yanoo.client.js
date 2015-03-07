@@ -12,7 +12,7 @@ Yanoo.Client = function(url, theta_id, sender_id) {
      * そのとき開いているブラウザの中でユニークであればいいので厳密にやらなくても良い
      */
     sender_id = sender_id || (~~(new Date / 1000)) + Math.random();
- 
+
     /**
      * Websocketに接続する
      */
@@ -20,7 +20,7 @@ Yanoo.Client = function(url, theta_id, sender_id) {
 
     // チャンネル
     var channel = conn.subscribe(theta_id);
-    
+
     /**
      * シェイプ追加をサーバにリクエストする
      */
@@ -43,6 +43,10 @@ Yanoo.Client = function(url, theta_id, sender_id) {
         } else {
             logger().log('新しいシェイプが送られてきました');
             logger().log(response);
+
+			if (response.result == "OK") {
+				theta.renderStroke(response.data);
+			}
         }
     });
 
@@ -62,4 +66,3 @@ Yanoo.Client = function(url, theta_id, sender_id) {
         }
     };
 };
-
