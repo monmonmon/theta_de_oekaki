@@ -3,12 +3,13 @@
 class GlueController < WebsocketRails::BaseController
 
   def initialize_session
-    logger.debug("initialize chat controller")
+    logger.debug("initialize glue controller")
   end
 
   def append
     req = JSON.parse(message)
     theta_id = req["theta_id"].to_i
+
     Theta.find(theta_id).strokes.new(
       type_id: req["type_id"],
       shape_id: req["shape_id"],

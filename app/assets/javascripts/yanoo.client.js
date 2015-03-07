@@ -1,5 +1,5 @@
 
-var Yanoo = typeof Yanoo === 'object' || {};
+var Yanoo = typeof Yanoo === 'object' ? Yanoo : {};
 
 /**
  * Websocketクライアント
