@@ -1,1 +1,251 @@
 yanoo!
+
+
+
+JSON
+```{
+  theta_id: 1, 
+  type_id: 1 || 2 // 1=画像, 2=色
+  image_id: 1, // 画像ID
+  shape_id: 1, // 1固定
+  pos: [
+    {
+      color: "#ff00ee",
+      y: 100,
+      x: 100,
+      z: 100
+    },
+    {
+      color: "#ffee00",
+      x: 200,
+      y: 200,
+      z: 200
+    },
+  ]
+}
+```
+
+```thetaテーブル
+
+| id       | integer |
+| url_hash | http://xxxxxxxxx.com/#{url_hash} |
+
+
+操作テーブル(描画するオブジェクト)
+
+| theta_id | references | シータ画面ID
+| type_id  | references | 1=画像 || 2=色                 
+| image_id | references | ヒヨコ画像ID 
+| shape_id | reference  | シェイプID(とりあえず1固定)
+| pos      | text       | 座標リスト JSON？
+
+
+画像マスター
+
+| id       | integer | ID                        |
+| url      | text    | http://xxxxxxxxxx/yyy.png |
+```
+(edited)
+
+hino [2:47 PM] 
+書き直しました
+
+hino [2:47 PM]
+UTF-8
+
+すべての文字列は UTF-8 エンコーディングです。
+
+JSON
+
+すべてのレスポンスは JSON 形式です。
+
+
+リクエストパラメータ(QueryString)
+```| url_hash | URLのハッシュキー |
+```
+
+レスポンス(JSON)
+```{
+  "result": "OK" || "error",
+  "image_url": "http://xxxxxxxxx.com/#{theta_uploaded_url}.png", // THETAからアップロードされた画像
+  "data": {
+    "theta_id": 1,
+    "type_id": 1, // 1=画像, 2=色
+    "image_id": 1, // 画像ID
+    "shape_id": 1, // 1固定
+    "pos": [
+      {
+        "color": "#ff00ee",
+        "y": 100,
+        "x": 100,
+        "z": 100
+      },
+      {
+        "color": "#ff00ee",
+        "y": 200,
+        "x": 200,
+        "z": 200
+      },
+      {
+        "color": "#ff00ee",
+        "y": 300,
+        "x": 300,
+        "z": 300
+      }
+    ]
+  },
+  "meta": {
+    "requested": 1377003045,
+    "exec_time": 0.089531    
+  }
+  
+}
+```
+
+--------------------------------------------------------------------------------
+
+シェイプ追加リクエスト(Websocket＆JSON)
+
+```{
+  "theta_id": 1,
+  "type_id": 1, // 1=画像, 2=色
+  "image_id": 1, // 画像ID
+  "shape_id": 1, // 1固定
+  "pos": [
+    {
+      "color": "#ff00ee",
+      "y": 100,
+      "x": 100,
+      "z": 100
+    },
+    {
+      "color": "#ff00ee",
+      "y": 200,
+      "x": 200,
+      "z": 200
+    },
+    {
+      "color": "#ff00ee",
+      "y": 300,
+      "x": 300,
+      "z": 300
+    }
+  ]
+}
+```
+
+レスポンス(JSON)
+
+```{
+  "result": "OK" || "error",
+  "data": {
+    "theta_id": 1,
+  },
+  "meta": {
+    "requested": 1377003045,
+    "exec_time": 0.089531    
+  }
+  
+}
+```
+
+--------------------------------------------------------------------------------
+
+テーブル設計
+```thetaテーブル
+
+| id        | integer |
+| url_hash  | http://xxxxxxxxx.com/#{url_hash} |
+| image_url | http://xxxxxxxxx.com/#{theta_uploaded_url}.png |
+
+
+操作テーブル(描画するオブジェクト)
+
+| theta_id | references | シータ画面ID
+| type_id  | references | 1=画像 || 2=色                 
+| image_id | references | ヒヨコ画像ID 
+| shape_id | reference  | シェイプID(とりあえず1固定)
+| pos      | text       | 座標リスト JSON？
+
+
+画像マスター
+
+| id       | integer | ID                        |
+| url      | text    | http://xxxxxxxxxx/yyy.png |
+```
+
+
+# Javascriptインターフェイス
+
+* コーディング規約は Google JavaScript Style Guideに準拠
+http://cou929.nu/data/google_javascript_style_guide/
+* 使用するライブラリ
+three.js、jquery.js はマスト
+
+
+```Javascript
+window.Yanoo = {
+  /**
+   * マスタ
+   */
+  master: {
+    /**
+     * スタンプ?画像マスタ
+     */
+    images: {
+      1: "http://xxxxxxxxxxxxxxxxxxx.com/1.png",
+      2: "http://xxxxxxxxxxxxxxxxxxx.com/2.png",
+      3: "http://xxxxxxxxxxxxxxxxxxx.com/3.png",
+      4: "http://xxxxxxxxxxxxxxxxxxx.com/4.png",
+      5: "http://xxxxxxxxxxxxxxxxxxx.com/5.png",
+    }
+  },
+  /**
+   * レンダリング
+   */
+  render: {
+    /**
+     * 開始
+     *
+     * @params string image_url THETAからアップロードされた画像URL
+     * @params array[] shapes シェイプオブジェクトのリスト
+     */
+    load: function(image_url, shapes) {
+        // 描画してね
+    },
+    /**
+     * レシーバが受けとったシェイプを描画する
+     *
+     * @params array[] shapes シェイプオブジェクトのリスト
+     */
+    append: function(shapes) {
+      // 描画してね
+    }
+  },
+  /**
+   * クライアント
+   */
+  client: {
+    /**
+     * シェイプ追加リクエストメソッド（サーバにPOSTする）
+     * 
+     * @params array[] shapes シェイプオブジェクトのリスト
+     */
+    post: function(shapes) {
+      // サーバにPOSTしてね
+    },
+    /**
+     * サーバから新しいshapeを受け取るレシーバの実装
+     */
+    recv: function() {
+      // レシーバを実装してね
+      // ...
+      Yanoo.render.append(shapes); // 描画する
+    },
+  }
+};
+```
+
+
+
+
