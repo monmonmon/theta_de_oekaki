@@ -6,6 +6,7 @@ var theta = {
 	controls: null,
 	camera: null,
 	renderer: null,
+	drawer: null,
 	editing: false,
 	drawing: false,
 	list: [],
@@ -42,23 +43,24 @@ var theta = {
 			requestAnimationFrame(render);
 			theta.renderer.render(theta.scene, theta.camera);
 		}
-		function onMouseWheel(event) {
-			event.preventDefault();
-			if (event.wheelDeltaY) { // WebKit
-				theta.camera.fov -= event.wheelDeltaY * 0.05;
-			} else if (event.wheelDelta) { // Opera / IE9
-				theta.camera.fov -= event.wheelDelta * 0.05;
-			} else if (event.detail) { // Firefox
-				theta.camera.fov += event.detail * 1.0;
-			}
-			theta.camera.fov = Math.max(40, Math.min(100, theta.camera.fov));
-			theta.camera.updateProjectionMatrix();
-		}
-		document.addEventListener('mousewheel', onMouseWheel, false);
-		document.addEventListener('DOMMouseScroll', onMouseWheel, false);
+		// function onMouseWheel(event) {
+		// 	event.preventDefault();
+		// 	if (event.wheelDeltaY) { // WebKit
+		// 		theta.camera.fov -= event.wheelDeltaY * 0.05;
+		// 	} else if (event.wheelDelta) { // Opera / IE9
+		// 		theta.camera.fov -= event.wheelDelta * 0.05;
+		// 	} else if (event.detail) { // Firefox
+		// 		theta.camera.fov += event.detail * 1.0;
+		// 	}
+		// 	theta.camera.fov = Math.max(40, Math.min(100, theta.camera.fov));
+		// 	theta.camera.updateProjectionMatrix();
+		// }
+		// document.addEventListener('mousewheel', onMouseWheel, false);
+		// document.addEventListener('DOMMouseScroll', onMouseWheel, false);
 
 		$('#toggle-edit-button').on('click', theta.toggleEdit);
-
+		$('.mode-button').on('click', theta.clickChangeDrawer);
+		theta.changeDrawer(RedParticleDrawer)
 	},
 	toggleEdit: function () {
 		theta.editing = theta.editing ? false : true;
@@ -75,6 +77,17 @@ var theta = {
 			theta.buttons.hide();
 			theta.disableDrawing();
 		}
+	},
+	clickChangeDrawer: function () {
+		var drawerName = $(this).data('drawer');
+		drawerName = eval(drawerName);
+		theta.changeDrawer(drawerName);
+	},
+	changeDrawer: function (drawerName) {
+		theta.drawer = new drawerName(theta)
+		// change the style of the clicked button
+		$('.mode-button').removeClass('selected-mode');
+		$(this).addClass('selected-mode');
 	},
 	enableDrawing: function () {
 		$(theta.renderer.domElement)
@@ -118,33 +131,10 @@ var theta = {
 			if (intersects.length > 0) {
 				// 1つ以上のオブジェクトと交差
 				var point = intersects[0].point;
-				theta.hoehoe(point);
+				theta.drawer.draw(point);
+				// theta.hoehoe(point);
 			}
 		}
-	},
-	plotable: true,
-	hoehoe: function (point) {
-		if (theta.plotable) {
-			theta.plotParticle(point);
-			// theta.plotable = false;
-			// setTimeout(function () {
-			// 	theta.plotable = true;
-			// }, 1);
-		}
-	},
-	plotParticle: function (point) {
-		// console.log(point);
-		var particle = new THREE.Mesh(
-			new THREE.SphereGeometry(1),
-			new THREE.MeshBasicMaterial({
-				color: 0xff0000
-			})
-		);
-		particle.position.x = point.x;
-		particle.position.y = point.y;
-		particle.position.z = point.z;
-		theta.scene.add(particle);
-		theta.list.push(particle);
 	},
 	buttons: {
 		show: function () {
@@ -155,6 +145,83 @@ var theta = {
 		},
 	},
 };
+
+var Drawer = function (theta) {
+	this.theta = theta;
+};
+Drawer.prototype.plot = function (point, object) {
+	object.position.x = point.x;
+	object.position.y = point.y;
+	object.position.z = point.z;
+	this.theta.scene.add(object);
+	this.theta.list.push(object);
+};
+
+var RedParticleDrawer = function () {
+	Drawer.apply(this, arguments);
+};
+RedParticleDrawer.prototype = new Drawer;
+RedParticleDrawer.prototype.draw = function (point) {
+	// console.log(point);
+	var particle = new THREE.Mesh(
+		new THREE.SphereGeometry(1),
+		new THREE.MeshBasicMaterial({
+			color: 0xff0000
+		})
+	);
+	this.plot(point, particle);
+};
+
+var GreenParticleDrawer = function () {
+	Drawer.apply(this, arguments);
+};
+GreenParticleDrawer.prototype = new Drawer;
+GreenParticleDrawer.prototype.draw = function (point) {
+	var particle = new THREE.Mesh(
+		new THREE.SphereGeometry(1),
+		new THREE.MeshBasicMaterial({
+			color: 0x00ff00
+		})
+	);
+	this.plot(point, particle);
+};
+
+var RainbowParticleDrawer = function () {
+	Drawer.apply(this, arguments);
+};
+RainbowParticleDrawer.prototype = new Drawer;
+RainbowParticleDrawer.prototype.draw = function (point) {
+	var particle = new THREE.Mesh(
+		new THREE.SphereGeometry(1)
+	);
+	this.plot(point, particle);
+};
+
+var DelayedParticleDrawer = function () {
+	this.plotable = true;
+	Drawer.apply(this, arguments);
+};
+DelayedParticleDrawer.prototype = new Drawer;
+DelayedParticleDrawer.prototype.draw = function (point) {
+	if (this.plotable) {
+		var particle = new THREE.Mesh(
+			new THREE.SphereGeometry(1),
+			new THREE.MeshBasicMaterial({
+				color: 0x00ffff
+			})
+		);
+		this.plot(point, particle);
+
+		this.plotable = false;
+		var that = this;
+		setTimeout(function () {
+			that.plotable = true;
+		}, 1000);
+	}
+};
+
+
+
 
 $(function () {
 	theta.init();
