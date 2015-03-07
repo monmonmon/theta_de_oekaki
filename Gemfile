@@ -35,16 +35,13 @@ gem 'spring',        group: :development
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
 
-# Use debugger
-# gem 'debugger', group: [:development, :test]
-
 gem 'rspec'
 
 group :development do
   # pry
   gem 'pry-rails'
   gem 'pry-doc'
-  gem 'pry-debugger'
+  #gem 'pry-debugger'
   gem 'pry-stack_explorer'
   # make outputs in rake console awesome
   gem 'awesome_print'
