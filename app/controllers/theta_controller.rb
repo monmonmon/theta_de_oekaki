@@ -1,6 +1,9 @@
 class ThetaController < ApplicationController
   before_action :set_thetum, only: [:show, :edit, :update, :destroy]
 
+  def test
+  end
+
   # GET /theta
   # GET /theta.json
   def index
