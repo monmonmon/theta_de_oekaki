@@ -12,6 +12,5 @@ WebsocketRails::EventMap.describe do
   #   end
   # The above will handle an event triggered on the client like `product.new`.
 
-  subscribe :connect, to: ::HmockWebsocketController, with_method: :connect
-  subscribe :append, to: ::HmockWebsocketController, with_method: :append
+  subscribe :append, to: ::GlueController, with_method: :append
 end

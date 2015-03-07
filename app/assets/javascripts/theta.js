@@ -1,4 +1,5 @@
 var theta = {
+	channel: null,
 	scene: null,
 	sphere: null,
 	width: null,
@@ -6,20 +7,20 @@ var theta = {
 	controls: null,
 	camera: null,
 	renderer: null,
+	drawer: null,
 	editing: false,
 	drawing: false,
-	list: [],
-	init: function () {
+	plotted_objects: [],
+	init: function (channel) {
+		theta.channel = channel;
 		var $area = $('#sphere');
 		var imageUrl = $area.data('image');
-		theta.width = $area.data('width')
+		theta.width = $area.data('width');
 		theta.height = $area.data('height');
 		theta.scene = new THREE.Scene();
 		theta.camera = new THREE.PerspectiveCamera(75, theta.width / theta.height, 1, 1000);
-
+        theta.client = new Yanoo.Client(location.hostname + ':3001/websocket', this.channel);
 		theta.camera.position.x = 0.1;  // カメラは球体の内側
-		// theta.camera.position.x = 150;	// カメラは球体の外側
-
 		theta.renderer = Detector.webgl ? new THREE.WebGLRenderer() : new THREE.CanvasRenderer();
 		theta.renderer.setSize(theta.width, theta.height);
 		theta.sphere = new THREE.Mesh(
@@ -30,11 +31,7 @@ var theta = {
 		);
 		theta.sphere.scale.x = -1;
 		theta.scene.add(theta.sphere);
-
 		theta.controls = new THREE.OrbitControls(theta.camera);
-
-		theta.toggleEdit();
-
 		$area.append(theta.renderer.domElement);
 		render();
 		function render() {
@@ -42,25 +39,60 @@ var theta = {
 			requestAnimationFrame(render);
 			theta.renderer.render(theta.scene, theta.camera);
 		}
-		function onMouseWheel(event) {
-			event.preventDefault();
-			if (event.wheelDeltaY) { // WebKit
-				theta.camera.fov -= event.wheelDeltaY * 0.05;
-			} else if (event.wheelDelta) { // Opera / IE9
-				theta.camera.fov -= event.wheelDelta * 0.05;
-			} else if (event.detail) { // Firefox
-				theta.camera.fov += event.detail * 1.0;
-			}
-			theta.camera.fov = Math.max(40, Math.min(100, theta.camera.fov));
-			theta.camera.updateProjectionMatrix();
-		}
-		document.addEventListener('mousewheel', onMouseWheel, false);
-		document.addEventListener('DOMMouseScroll', onMouseWheel, false);
 
-		$('#toggle-edit-button').on('click', theta.toggleEdit);
+		// set event handlers
+		// document.addEventListener('mousewheel', theta.onMouseWheel, false);
+		// document.addEventListener('DOMMouseScroll', theta.onMouseWheel, false);
+		$('#toggle-edit-button').on('click', theta.onToggleEdit);
+		$('.mode-button').on('click', theta.onChangeMode)
+		// select a default drawer
+		$('.mode-button:first').trigger('click');
 
+		theta.onLoad();
 	},
-	toggleEdit: function () {
+	onLoad: function (data) {
+		$.getJSON('http://' + location.hostname + ':3000/m/' + theta.channel + '.json', function(d) {
+			for (var i = 0; i < d.data.strokes.length; i++) {
+				theta.renderStroke(d.data.strokes[i]);
+			}
+		});
+	},
+	renderStroke: function (stroke) {
+		for (var i = 0; i < stroke.pos.length; i++) {
+			var p = stroke.pos[i];
+			var object = new THREE.Mesh(
+				new THREE.SphereGeometry(1),
+				new THREE.MeshBasicMaterial({
+					color: p.color
+				})
+			);
+			object.position.x = p.x;
+			object.position.y = p.y;
+			object.position.z = p.z;
+			theta.scene.add(object);
+		}
+	},
+	onMouseWheel: function (event) {
+		event.preventDefault();
+		if (event.wheelDeltaY) { // WebKit
+			theta.camera.fov -= event.wheelDeltaY * 0.05;
+		} else if (event.wheelDelta) { // Opera / IE9
+			theta.camera.fov -= event.wheelDelta * 0.05;
+		} else if (event.detail) { // Firefox
+			theta.camera.fov += event.detail * 1.0;
+		}
+		theta.camera.fov = Math.max(40, Math.min(100, theta.camera.fov));
+		theta.camera.updateProjectionMatrix();
+	},
+	onChangeMode: function () {
+		var drawerName = $(this).data('drawer');
+		var drawerClass = eval(drawerName);
+		theta.drawer = new drawerClass(theta);
+		// change the style of the clicked button
+		$('.mode-button').removeClass('selected-mode');
+		$(this).addClass('selected-mode');
+	},
+	onToggleEdit: function () {
 		theta.editing = theta.editing ? false : true;
 		// prevent rotation / zoom / pan by the user
 		theta.controls.noZoom
@@ -94,6 +126,7 @@ var theta = {
 	},
 	finishDrawing: function () {
 		theta.drawing = false;
+		theta.upload();
 		console.log("finish drawing");
 	},
 	draw: function (e) {
@@ -118,33 +151,39 @@ var theta = {
 			if (intersects.length > 0) {
 				// 1つ以上のオブジェクトと交差
 				var point = intersects[0].point;
-				theta.hoehoe(point);
+				theta.drawer.draw(point);
+				// theta.hoehoe(point);
 			}
 		}
 	},
-	plotable: true,
-	hoehoe: function (point) {
-		if (theta.plotable) {
-			theta.plotParticle(point);
-			// theta.plotable = false;
-			// setTimeout(function () {
-			// 	theta.plotable = true;
-			// }, 1);
+	jsonize: function (objects) {
+		var pos = [], color;
+		for (var i = 0; i < objects.length; i++) {
+			try {
+				color = objects[i].material.color;
+				color = 0xff0000 * color.r + 0x00ff00 * color.g + 0x0000ff * color.b;
+			} catch (e) {
+				color = null;
+			}
+			pos.push({
+				color: color,
+				x: objects[i].position.x,
+				y: objects[i].position.y,
+				z: objects[i].position.z
+			});
 		}
+		return {
+			"theta_id": theta.channel,
+			"type_id": 1,
+			"image_id": 1,
+			"shape_id": 1,
+			"pos": pos,
+		};
 	},
-	plotParticle: function (point) {
-		// console.log(point);
-		var particle = new THREE.Mesh(
-			new THREE.SphereGeometry(1),
-			new THREE.MeshBasicMaterial({
-				color: 0xff0000
-			})
-		);
-		particle.position.x = point.x;
-		particle.position.y = point.y;
-		particle.position.z = point.z;
-		theta.scene.add(particle);
-		theta.list.push(particle);
+	upload: function () {
+		var json_object = theta.jsonize(theta.plotted_objects);
+		theta.client.append(json_object);
+		theta.plotted_objects = [];
 	},
 	buttons: {
 		show: function () {
@@ -157,5 +196,5 @@ var theta = {
 };
 
 $(function () {
-	theta.init();
+	theta.init(2);
 });

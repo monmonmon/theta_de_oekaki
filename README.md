@@ -119,8 +119,8 @@ JavascriptオブジェクトをJSONエンコードしWebsocketでパラメータ
 | キー      | 型      | 例 |
 |-----------|---------|----|
 | id        | integer | |
-| url_hash  | string  | http://xxxxxxxxx.com/#{url_hash} |
-| image_url | string  | http://xxxxxxxxx.com/#{theta_uploaded_url}.png |
+| url_hash  | string  | url_hash |
+| image_url | string  | pulic/theta/filename.jpg |
 
 
 ### 操作テーブル(描画するオブジェクト)

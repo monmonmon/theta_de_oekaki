@@ -1,5 +1,5 @@
 
-var Yanoo = typeof Yanoo === 'object' || {};
+var Yanoo = typeof Yanoo === 'object' ? Yanoo : {};
 
 /**
  * Websocketクライアント
@@ -9,8 +9,9 @@ Yanoo.Client = function(url, theta_id, sender_id) {
 
     /**
      * ブロードキャストした際に自分のリクエストか他人のリクエストか見分けるためのID
+     * そのとき開いているブラウザの中でユニークであればいいので厳密にやらなくても良い
      */
-    This.sender_id = sender_id || ~~(new Date);
+    sender_id = sender_id || (~~(new Date / 1000)) + Math.random();
 
     /**
      * Websocketに接続する
@@ -19,13 +20,15 @@ Yanoo.Client = function(url, theta_id, sender_id) {
 
     // チャンネル
     var channel = conn.subscribe(theta_id);
-    
+
     /**
      * シェイプ追加をサーバにリクエストする
      */
     This.append = function(sharps) {
         logger().log('request');
         logger().log(sharps);
+        sharps.sender = sender_id;
+        sharps.theta_id = theta_id;
         conn.trigger('append', JSON.stringify(sharps), function() {
             alert('faild');
         });
@@ -35,11 +38,15 @@ Yanoo.Client = function(url, theta_id, sender_id) {
      * 新しいシェイプが送られてきた
      */
     channel.bind('shape', function(response) {
-        if (response.data.sender === This.sender_id) {
+        if (response.data.sender === sender_id) {
             logger().log('新しいシェイプを送信しました');
         } else {
             logger().log('新しいシェイプが送られてきました');
             logger().log(response);
+
+			if (response.result == "OK") {
+				theta.renderStroke(response.data);
+			}
         }
     });
 
@@ -59,4 +66,3 @@ Yanoo.Client = function(url, theta_id, sender_id) {
         }
     };
 };
-

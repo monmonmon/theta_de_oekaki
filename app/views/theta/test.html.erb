@@ -1,11 +1,15 @@
 <%= stylesheet_link_tag "theta" %>
 <%= javascript_include_tag "OrbitControls" %>
 <%= javascript_include_tag "Detector" %>
+<%= javascript_include_tag "yanoo.client" %>
+<%= javascript_include_tag "drawers" %>
 <%= javascript_include_tag "theta" %>
 <div id="sphere" data-image="<%= asset_path "1st_meeting.jpg" %>" data-width="800" data-height="500">
 	<div class="control-buttons">
 		<div class="control-button" id="toggle-edit-button">★</div>
-		<div class="control-button mode-button hidden" id="particle-mode-button">◉</div>
-		<div class="control-button mode-button hidden" id="piyopiyo-mode-button">▲</div>
+		<div class="control-button mode-button hidden" data-drawer="RedParticleDrawer">◉</div>
+		<div class="control-button mode-button hidden" data-drawer="GreenParticleDrawer">▲</div>
+		<div class="control-button mode-button hidden" data-drawer="RainbowParticleDrawer">☀</div>
+		<div class="control-button mode-button hidden" data-drawer="DelayedParticleDrawer">☃</div>
 	</div>
 </div>
