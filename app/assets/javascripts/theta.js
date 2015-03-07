@@ -1,4 +1,5 @@
 var theta = {
+	channel: "xxx",
 	scene: null,
 	sphere: null,
 	width: null,
@@ -9,7 +10,7 @@ var theta = {
 	drawer: null,
 	editing: false,
 	drawing: false,
-	list: [],
+	plotted_objects: [],
 	init: function () {
 		var $area = $('#sphere');
 		var imageUrl = $area.data('image');
@@ -104,6 +105,7 @@ var theta = {
 	},
 	finishDrawing: function () {
 		theta.drawing = false;
+		theta.upload();
 		console.log("finish drawing");
 	},
 	draw: function (e) {
@@ -132,6 +134,35 @@ var theta = {
 				// theta.hoehoe(point);
 			}
 		}
+	},
+	jsonize: function (objects) {
+		var pos = [], color;
+		for (var i = 0; i < objects.length; i++) {
+			try {
+				color = objects[i].material.color;
+				color = 0xff0000 * color.r + 0x00ff00 * color.g + 0x0000ff * color.b;
+			} catch (e) {
+				color = null;
+			}
+			pos.push({
+				color: color,
+				x: objects[i].position.x,
+				y: objects[i].position.y,
+				z: objects[i].position.z
+			});
+		}
+		return {
+			"theta_id": theta.channel,
+			"type_id": 1,
+			"image_id": 1,
+			"shape_id": 1,
+			"pos": pos,
+		};
+	},
+	upload: function () {
+		var json_object = theta.jsonize(theta.plotted_objects);
+		console.log(JSON.stringify(json_object));
+		// theta.client.append(json_object);
 	},
 	buttons: {
 		show: function () {

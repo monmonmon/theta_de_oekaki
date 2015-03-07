@@ -7,7 +7,7 @@ Drawer.prototype.plot = function (point, object) {
 	object.position.y = point.y;
 	object.position.z = point.z;
 	this.theta.scene.add(object);
-	this.theta.list.push(object);
+	this.theta.plotted_objects.push(object);
 };
 
 // 赤いパーティクル
