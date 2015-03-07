@@ -1,3 +1,33 @@
 // Place all the styles related to the theta controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+
+.hidden {
+  display: none !important;
+}
+
+#sphere {
+  position: relative;
+}
+
+.control-buttons {
+  color: white;
+  font-size: 20pt;
+  position: absolute;
+  top: 10px;
+  left: 10px;
+}
+
+.control-button {
+  cursor: pointer;
+  display: inline;
+}
+
+#toggle-edit-button {
+}
+
+#particle-mode-button {
+}
+
+#piyopiyo-mode-button {
+}
