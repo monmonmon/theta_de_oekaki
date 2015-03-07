@@ -1,5 +1,5 @@
 var theta = {
-	channel: 2,
+	channel: null,
 	scene: null,
 	sphere: null,
 	width: null,
@@ -11,7 +11,8 @@ var theta = {
 	editing: false,
 	drawing: false,
 	plotted_objects: [],
-	init: function () {
+	init: function (channel) {
+		theta.channel = channel;
 		var $area = $('#sphere');
 		var imageUrl = $area.data('image');
 		theta.width = $area.data('width');
@@ -46,6 +47,30 @@ var theta = {
 		$('.mode-button').on('click', theta.onChangeMode)
 		// select a default drawer
 		$('.mode-button:first').trigger('click');
+
+		theta.onLoad();
+	},
+	onLoad: function (data) {
+		$.getJSON('http://' + location.hostname + ':3000/m/' + theta.channel + '.json', function(d) {
+			for (var i = 0; i < d.data.strokes.length; i++) {
+				theta.renderStroke(d.data.strokes[i]);
+			}
+		});
+	},
+	renderStroke: function (stroke) {
+		for (var i = 0; i < stroke.pos.length; i++) {
+			var p = stroke.pos[i];
+			var object = new THREE.Mesh(
+				new THREE.SphereGeometry(1),
+				new THREE.MeshBasicMaterial({
+					color: p.color
+				})
+			);
+			object.position.x = p.x;
+			object.position.y = p.y;
+			object.position.z = p.z;
+			theta.scene.add(object);
+		}
 	},
 	onMouseWheel: function (event) {
 		event.preventDefault();
@@ -157,8 +182,8 @@ var theta = {
 	},
 	upload: function () {
 		var json_object = theta.jsonize(theta.plotted_objects);
-		console.log(JSON.stringify(json_object));
 		theta.client.append(json_object);
+		theta.plotted_objects = [];
 	},
 	buttons: {
 		show: function () {
@@ -171,5 +196,5 @@ var theta = {
 };
 
 $(function () {
-	theta.init();
+	theta.init(2);
 });
