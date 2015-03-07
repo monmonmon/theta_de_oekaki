@@ -207,4 +207,5 @@ $(function () {
 		theta.strokeSize = $(this).val() - 0;
 	});
 	$('#stroke-size-2').trigger('click');
+	theta.strokeSize = $('#stroke-size-2').val() - 0;
 });
