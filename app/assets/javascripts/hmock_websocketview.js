@@ -6,7 +6,7 @@ window.jQuery(function($) {
     var url = $('#url').data('url');
     var channel = $('#channel').data('channel');
 
-    $.getJSON(index_url + '/' + channel, function(d) {
+    $.getJSON(index_url + '/' + channel + '.json', function(d) {
         window.client = new Yanoo.Client(url, channel);
 
         $('#debug-write').html('シェイプをすべて読み込みました<br />');

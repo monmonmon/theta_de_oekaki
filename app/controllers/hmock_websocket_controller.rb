@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-class HmockWebsocketController  < WebsocketRails::BaseController
+class HmockWebsocketController < WebsocketRails::BaseController
 
   def initialize_session
     logger.debug("initialize chat controller")
