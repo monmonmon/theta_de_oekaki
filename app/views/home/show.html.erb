@@ -1,0 +1,11 @@
+<h1>Channel: <%= params[:id] %></h1>
+<hr/>
+<div>
+  <input type="button" class="btn btn-primary" id="send" value="シェイプ送信"/>
+  <div id="index" data-index="http://<%= request.host %>:<%= request.port %>/m" style="display: none;"></div>
+  <div id="url" data-url="<%= request.host %>:3001/websocket" style="display: none;"></div>
+  <div id="channel" data-channel="<%= params[:id] %>" style="display: none;"></div>
+  <div id="debug-write" style="background-color: #ddd;"></div>
+</div>
+<%= javascript_include_tag "yanoo.client.js" %>
+<%= javascript_include_tag "glue.js" %>
