@@ -1,0 +1,9 @@
+<h1>websocket Sample</h1>
+<hr/>
+<div>
+  <input type="button" class="btn btn-primary" id="send" value="シェイプ送信"/>
+  <div id="index" data-index="http://<%= request.host %>:<%= request.port %>/hmock_websocketview" style="display: none;"></div>
+  <div id="url" data-url="<%= request.host %>:3001/websocket" style="display: none;"></div>
+  <div id="channel" data-channel="<%= params.has_key?("channel") ? params[:channel] : 1 %>" style="display: none;"></div>
+  <div id="debug-write" style="background-color: #ddd;"></div>
+</div>

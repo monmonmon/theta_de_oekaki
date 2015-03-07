@@ -1,0 +1,2 @@
+module HmockWebsocketHelper
+end
