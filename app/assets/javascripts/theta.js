@@ -51,7 +51,7 @@ var theta = {
 		theta.onLoad();
 	},
 	onLoad: function (data) {
-		$.getJSON('http://' + location.hostname + ':3000/m/' + theta.channel + '.json', function(d) {
+		$.getJSON('http://' + location.hostname + ':' + location.port + '/m/' + theta.channel + '.json', function(d) {
 			for (var i = 0; i < d.data.strokes.length; i++) {
 				theta.renderStroke(d.data.strokes[i]);
 			}
