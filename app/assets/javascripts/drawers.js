@@ -76,29 +76,29 @@ DelayedDrawer.prototype.draw = function (point) {
 	}
 };
 
-// 画像
-var ImageDrawer = function () {
-	this.waiting = true;
-	Drawer.apply(this, arguments);
-};
-ImageDrawer.prototype = new Drawer;
-ImageDrawer.prototype.draw = function (point) {
-	if (this.waiting) {
-		var object = new THREE.Mesh(
-			// new THREE.PlaneBufferGeometry(30, 30),
-			new THREE.PlaneGeometry(30, 30),
-			new THREE.MeshBasicMaterial({
-				map: THREE.ImageUtils.loadTexture('/stickers/01.png', {}, function() {
-					theta.renderer.render(theta.scene, theta.camera);
-				})
-			})
-		);
-		this.plot(point, object);
-
-		this.waiting = false;
-		var that = this;
-		setTimeout(function () {
-			that.waiting = true;
-		}, 500);
-	}
-};
+// // 画像
+// var ImageDrawer = function () {
+// 	this.waiting = true;
+// 	Drawer.apply(this, arguments);
+// };
+// ImageDrawer.prototype = new Drawer;
+// ImageDrawer.prototype.draw = function (point) {
+// 	if (this.waiting) {
+// 		var object = new THREE.Mesh(
+// 			// new THREE.PlaneBufferGeometry(3, 3),
+// 			// new THREE.PlaneGeometry(3, 3),
+// 			new THREE.SphereGeometry(5),
+// 			new THREE.MeshBasicMaterial({
+// 				map: THREE.ImageUtils.loadTexture('/stickers/01.png', {}, function() {
+// 					theta.renderer.render(theta.scene, theta.camera);
+// 				})
+// 			})
+// 		);
+// 		this.plot(point, object);
+// 		this.waiting = false;
+// 		var that = this;
+// 		setTimeout(function () {
+// 			that.waiting = true;
+// 		}, 200);
+// 	}
+// };
