@@ -59,9 +59,9 @@
 ---
 
 
-### シェイプ追加リクエスト(Websocket＆JSON)
+## シェイプ追加リクエスト(Websocket＆JSON)
 
-## リクエスト(JSON)
+### リクエスト(JSON)
 
 websocketでJSONエンコードしたパラメータを渡します
 
