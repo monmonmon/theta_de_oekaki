@@ -37,7 +37,7 @@ class ThetaController < ApplicationController
     end
 
     theta = Theta.create!(url_hash: url_hash, image_url: name)
-    render json: "http://www.rakugaki.tk/#{theta.url_hash}", status: 201
+    render json: "http://www.rakugaki.tk/h/#{theta.url_hash}", status: 201
   end
 
   # PATCH/PUT /theta/1
