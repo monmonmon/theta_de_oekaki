@@ -63,7 +63,7 @@
 
 ### リクエスト(JSON)
 
-websocketでJSONエンコードしたパラメータを渡します
+JavascriptオブジェクトをJSONエンコードしWebsocketでパラメータを渡します
 
 ```
 {
