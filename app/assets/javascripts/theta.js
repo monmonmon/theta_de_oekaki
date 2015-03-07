@@ -1,5 +1,5 @@
 var theta = {
-	channel: "xxx",
+	channel: 2,
 	scene: null,
 	sphere: null,
 	width: null,
@@ -18,6 +18,7 @@ var theta = {
 		theta.height = $area.data('height');
 		theta.scene = new THREE.Scene();
 		theta.camera = new THREE.PerspectiveCamera(75, theta.width / theta.height, 1, 1000);
+        theta.client = new Yanoo.Client(location.hostname + ':3001/websocket', this.channel);
 
 		theta.camera.position.x = 0.1;  // カメラは球体の内側
 		// theta.camera.position.x = 150;	// カメラは球体の外側
@@ -162,7 +163,7 @@ var theta = {
 	upload: function () {
 		var json_object = theta.jsonize(theta.plotted_objects);
 		console.log(JSON.stringify(json_object));
-		// theta.client.append(json_object);
+		theta.client.append(json_object);
 	},
 	buttons: {
 		show: function () {

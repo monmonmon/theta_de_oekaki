@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150307070458) do
+ActiveRecord::Schema.define(version: 20150307153610) do
 
   create_table "images", force: true do |t|
     t.text     "url"
@@ -26,6 +26,7 @@ ActiveRecord::Schema.define(version: 20150307070458) do
     t.text     "pos"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "image_id"
   end
 
   add_index "strokes", ["theta_id"], name: "index_strokes_on_theta_id"

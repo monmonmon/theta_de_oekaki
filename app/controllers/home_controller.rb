@@ -1,52 +1,41 @@
+# -*- coding: utf-8 -*-
 
 class HomeController < ApplicationController
 
   def show
     respond_to do |format|
-      format.json { _show_json_ }
+      format.json { _show_json_(params[:id]) }
       format.html
     end
   end
 
-  protected
-  def _show_json_
-    theta_id = params[:id]
-    str = <<-"EOS"
-{
-    "theta_id": "#{theta_id}",
-    "type_id": 1,
-    "image_id": 1,
-    "shape_id": 1,
-    "pos": [
-      {
-        "color": "#ff00ee",
-        "y": 100,
-        "x": 100,
-        "z": 100
-      },
-      {
-        "color": "#ff00ee",
-        "y": 200,
-        "x": 200,
-        "z": 200
-      },
-      {
-        "color": "#ff00ee",
-        "y": 300,
-        "x": 300,
-        "z": 300
-      }
-    ]
-}
-    EOS
 
+  protected
+  def _show_json_(theta_id)
+    theta = Theta.find(theta_id)
     render json: {
       result: "OK",
-      data: JSON.parse(str),
+      data: {
+        theta_id: theta.id,
+        url_hash: theta.url_hash,
+        image_url: theta.image_url,
+        strokes: theta.strokes.collect{ |x| x.to_hash },
+      },
       meta: {
         requested: Time.now.to_i,
       }
-    }
+    }.to_json
+  rescue => e
+    render json: {
+      result: "error",
+      data: {
+        exception: e.class.to_s,
+        message: e.message,
+      },
+      meta: {
+        requested: Time.now.to_i,
+      }
+    }.to_json
   end
 
 end
