@@ -126,19 +126,23 @@ var theta = {
 			console.log('plot!');
 			theta.plotParticle(point);
 			theta.plotable = false;
-			setTimeout(function () {
 				theta.plotable = true;
-			}, 1000);
+			// setTimeout(function () {
+			// 	theta.plotable = true;
+			// }, 1);
 		}
 	},
 	plotParticle: function (point) {
 		console.log(point);
 		var particle = new THREE.Mesh(
-			new THREE.SphereGeometry(20),
-			new THREE.MeshBasicMaterial({
-				color: "0xf00"
-			})
+			new THREE.SphereGeometry(1)// ,
+			// new THREE.MeshBasicMaterial({
+			// 	color: "0xff0000"
+			// })
 		);
+		particle.position.x = point.x;
+		particle.position.y = point.y;
+		particle.position.z = point.z;
 		theta.scene.add(particle);
 		theta.list.push(particle);
 	},
