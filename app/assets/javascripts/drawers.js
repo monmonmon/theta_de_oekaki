@@ -10,11 +10,11 @@ Drawer.prototype.plot = function (point, object) {
 };
 
 // 赤
-var RedParticleDrawer = function () {
+var RedDrawer = function () {
 	Drawer.apply(this, arguments);
 };
-RedParticleDrawer.prototype = new Drawer;
-RedParticleDrawer.prototype.draw = function (point) {
+RedDrawer.prototype = new Drawer;
+RedDrawer.prototype.draw = function (point) {
 	// console.log(point);
 	var object = new THREE.Mesh(
 		new THREE.SphereGeometry(theta.strokeSize),
@@ -26,11 +26,11 @@ RedParticleDrawer.prototype.draw = function (point) {
 };
 
 // 緑
-var GreenParticleDrawer = function () {
+var GreenDrawer = function () {
 	Drawer.apply(this, arguments);
 };
-GreenParticleDrawer.prototype = new Drawer;
-GreenParticleDrawer.prototype.draw = function (point) {
+GreenDrawer.prototype = new Drawer;
+GreenDrawer.prototype.draw = function (point) {
 	var object = new THREE.Mesh(
 		new THREE.SphereGeometry(theta.strokeSize),
 		new THREE.MeshBasicMaterial({
@@ -41,15 +41,30 @@ GreenParticleDrawer.prototype.draw = function (point) {
 };
 
 // 水色
-var DelayedDrawer = function () {
+var CyanDrawer = function () {
 	Drawer.apply(this, arguments);
 };
-DelayedDrawer.prototype = new Drawer;
-DelayedDrawer.prototype.draw = function (point) {
+CyanDrawer.prototype = new Drawer;
+CyanDrawer.prototype.draw = function (point) {
 	var object = new THREE.Mesh(
 		new THREE.SphereGeometry(theta.strokeSize),
 		new THREE.MeshBasicMaterial({
 			color: 0x00ffff
+		})
+	);
+	this.plot(point, object);
+};
+
+// Yellow
+var YellowDrawer = function () {
+	Drawer.apply(this, arguments);
+};
+YellowDrawer.prototype = new Drawer;
+YellowDrawer.prototype.draw = function (point) {
+	var object = new THREE.Mesh(
+		new THREE.SphereGeometry(theta.strokeSize),
+		new THREE.MeshBasicMaterial({
+			color: 0xffff00
 		})
 	);
 	this.plot(point, object);
@@ -80,29 +95,29 @@ RainbowParticleDrawer.prototype.draw = function (point) {
 	this.plot(point, object);
 };
 
-// // 画像
-// var ImageDrawer = function () {
-// 	this.waiting = true;
-// 	Drawer.apply(this, arguments);
-// };
-// ImageDrawer.prototype = new Drawer;
-// ImageDrawer.prototype.draw = function (point) {
-// 	if (this.waiting) {
-// 		var object = new THREE.Mesh(
-// 			// new THREE.PlaneBufferGeometry(3, 3),
-// 			// new THREE.PlaneGeometry(3, 3),
-// 			new THREE.SphereGeometry(5),
-// 			new THREE.MeshBasicMaterial({
-// 				map: THREE.ImageUtils.loadTexture('/stickers/01.png', {}, function() {
-// 					theta.renderer.render(theta.scene, theta.camera);
-// 				})
-// 			})
-// 		);
-// 		this.plot(point, object);
-// 		this.waiting = false;
-// 		var that = this;
-// 		setTimeout(function () {
-// 			that.waiting = true;
-// 		}, 200);
-// 	}
-// };
+// 画像
+var ImageDrawer = function () {
+	this.waiting = true;
+	Drawer.apply(this, arguments);
+};
+ImageDrawer.prototype = new Drawer;
+ImageDrawer.prototype.draw = function (point) {
+	if (this.waiting) {
+		var object = new THREE.Mesh(
+			// new THREE.PlaneBufferGeometry(3, 3),
+			new THREE.PlaneGeometry(3, 3),
+			// new THREE.SphereGeometry(5),
+			new THREE.MeshBasicMaterial({
+				map: THREE.ImageUtils.loadTexture('/stickers/01.png', {}, function() {
+					theta.renderer.render(theta.scene, theta.camera);
+				})
+			})
+		);
+		this.plot(point, object);
+		this.waiting = false;
+		var that = this;
+		setTimeout(function () {
+			that.waiting = true;
+		}, 200);
+	}
+};

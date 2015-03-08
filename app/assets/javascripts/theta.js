@@ -186,9 +186,11 @@ var theta = {
 		};
 	},
 	upload: function () {
-		var json_object = theta.jsonize(theta.plotted_objects);
-		theta.client.append(json_object);
-		theta.plotted_objects = [];
+		if (theta.plotted_objects.length > 0) {
+			var json_object = theta.jsonize(theta.plotted_objects);
+			theta.client.append(json_object);
+			theta.plotted_objects = [];
+		}
 	},
 	buttons: {
 		show: function () {
